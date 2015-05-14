@@ -28,7 +28,7 @@
       {% endfor %}
       <br>
       |{% for pr in providers %}
-        <a href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');">{{ pr.name }}</a>|
+        <a href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');">{{ pr.name }}</a> |
       {% endfor %}
     </p>
     <p>{{ form.remember_me }} Remember Me</p>
