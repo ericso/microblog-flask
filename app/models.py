@@ -90,6 +90,15 @@ class User(db.Model):
       Post.timestamp.desc()
     )
 
+  def sorted_posts(self):
+    """Returns a query object sorted by timestamp
+    """
+    return Post.query.filter(
+      Post.user_id == self.id
+    ).order_by(
+      Post.timestamp.desc()
+    )
+
   @staticmethod
   def make_unique_nickname(nickname):
     if User.query.filter_by(nickname=nickname).first() is None:
