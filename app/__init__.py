@@ -5,6 +5,9 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.openid import OpenID
 
+from flask.ext.admin import Admin
+from flask.ext.admin.contrib.sqla import ModelView
+
 from config import (
   basedir,
   ADMINS,
@@ -25,6 +28,9 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 oid = OpenID(app, os.path.join(basedir, 'tmp'))
+
+# Admin interface
+admin = Admin(app)
 
 # Logging
 if not app.debug:
@@ -65,3 +71,7 @@ if not app.debug:
 
 # Put views import after app creation to avoid circular import
 from app import views, models
+
+# Add admin views
+admin.add_view(ModelView(models.User, db.session))
+admin.add_view(ModelView(models.Post, db.session))
