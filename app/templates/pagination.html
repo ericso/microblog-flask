@@ -1,0 +1,27 @@
+<nav>
+  <ul class="pagination">
+    {% if posts.has_prev %}
+    <li>
+      <a href="{{ url_for('index', page=posts.prev_num) }}" aria-label="Previous">
+        <span aria-hidden="true">Previous</span>
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <span aria-hidden="true">Previous</span>
+    </li>
+    {% endif %}
+
+    {% if posts.has_next %}
+    <li>
+      <a href="{{ url_for('index', page=posts.next_num) }}" aria-label="Next">
+        <span aria-hidden="true">Next</span>
+      </a>
+    </li>
+    {% else %}
+    <li>
+      <span aria-hidden="true">Next</span>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
