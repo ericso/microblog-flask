@@ -8,6 +8,8 @@ from flask.ext.openid import OpenID
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqla import ModelView
 
+from flask.ext.mail import Mail
+
 from config import (
   basedir,
   ADMINS,
@@ -19,6 +21,9 @@ from config import (
 
 app = Flask(__name__)
 app.config.from_object('config')
+
+# Email
+mail = Mail(app)
 
 # Database
 db = SQLAlchemy(app)

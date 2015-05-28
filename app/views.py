@@ -25,6 +25,7 @@ from app import (
 )
 from app.forms import LoginForm, EditForm, PostForm, SearchForm
 from app.models import User, Post
+from app.emails import follower_notification
 
 
 @app.before_request
@@ -192,7 +193,9 @@ def follow(nickname):
     return redirect(url_for('user', nickname=nickname))
   db.session.add(u)
   db.session.commit()
+
   flash("You are now following %s!" % nickname)
+  follower_notification(user, g.user)
   return redirect(url_for('user', nickname=nickname))
 
 @app.route('/unfollow/<nickname>')
