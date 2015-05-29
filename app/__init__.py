@@ -19,6 +19,9 @@ from config import (
   MAIL_PASSWORD,
 )
 
+from app.momentjs import momentjs
+
+
 app = Flask(__name__)
 app.config.from_object('config')
 
@@ -73,9 +76,13 @@ if not app.debug:
   app.logger.addHandler(file_handler)
   app.logger.info('microblog startup')
 
+# Templating
+app.jinja_env.globals['momentjs'] = momentjs
+
 
 # Put views import after app creation to avoid circular import
 from app import views, models
+
 
 # Add admin views
 admin.add_view(ModelView(models.User, db.session))
