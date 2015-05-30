@@ -15,13 +15,19 @@ from flask.ext.login import (
   current_user,
   login_required,
 )
+from flask.ext.babel import gettext
 
-from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
+from config import (
+  POSTS_PER_PAGE,
+  MAX_SEARCH_RESULTS,
+  LANGUAGES,
+)
 from app import (
   app,
   db,
   lm,
   oid,
+  babel,
 )
 from app.forms import LoginForm, EditForm, PostForm, SearchForm
 from app.models import User, Post
@@ -36,11 +42,12 @@ def before_request():
     db.session.add(g.user)
     db.session.commit()
     g.search_form = SearchForm()
+  g.locale = get_locale()
 
 @oid.after_login
 def after_login(resp):
   if resp.email is None or resp.email == '':
-    flash("Invalid login. Please try again.")
+    flash(gettext("Invalid login. Please try again."))
     return redirect(url_for('login'))
 
   user = User.query.filter_by(email=resp.email).first()
@@ -48,6 +55,7 @@ def after_login(resp):
     nickname = resp.nickname
     if nickname is None or nickname == '':
       nickname = resp.email.split('@')[0]
+    nickname = User.make_valid_nickname(nickname)
     nickname = User.make_unique_nickname(nickname)
     user = User(nickname=nickname, email=resp.email)
     db.session.add(user)
@@ -68,6 +76,10 @@ def after_login(resp):
 @lm.user_loader
 def load_user(id):
   return User.query.get(int(id))
+
+@babel.localeselector
+def get_locale():
+  return request.accept_languages.best_match(LANGUAGES.keys())
 
 
 @app.route('/', methods=['GET', 'POST'])

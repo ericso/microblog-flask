@@ -6,6 +6,7 @@ else:
   enable_search = True
   import flask.ext.whooshalchemy as whooshalchemy
 
+import re
 from hashlib import md5
 
 from app import app, db
@@ -124,6 +125,9 @@ class User(db.Model):
 
     return new_nickname
 
+  @staticmethod
+  def make_valid_nickname(nickname):
+    return re.sub('[^a-zA-Z0-9\.]', '', nickname)
 
   def __repr__(self):
     return '<User %r>' % (self.nickname)

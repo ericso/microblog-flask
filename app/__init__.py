@@ -9,6 +9,7 @@ from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqla import ModelView
 
 from flask.ext.mail import Mail
+from flask.ext.babel import Babel
 
 from config import (
   basedir,
@@ -24,6 +25,9 @@ from app.momentjs import momentjs
 
 app = Flask(__name__)
 app.config.from_object('config')
+
+# Localization
+babel = Babel(app)
 
 # Email
 mail = Mail(app)

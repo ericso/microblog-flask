@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 
 
@@ -33,3 +34,9 @@ POSTS_PER_PAGE = 3
 # Whoosh Full Text Search
 WHOOSH_BASE = os.path.join(basedir, 'search.db')
 MAX_SEARCH_RESULTS = 50
+
+# Languages
+LANGUAGES = {
+  'en': 'English',
+  'es': 'Español'
+}
