@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-29 14:43-0700\n"
+"POT-Creation-Date: 2015-06-01 09:01-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
+#: app/__init__.py:42
+msgid "Please log in to access this page."
+msgstr ""
+
 #: app/forms.py:27
 msgid ""
 "This nickname has invalid characters. Please use only letters, numbers, "
 "dots and underscores only."
 msgstr ""
 
-#: app/views.py:49
+#: app/views.py:50
 msgid "Invalid login. Please try again."
 msgstr ""
 

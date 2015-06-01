@@ -1,15 +1,17 @@
 import os
 
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager
-from flask.ext.openid import OpenID
+
+from flask.json import JSONEncoder
 
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqla import ModelView
 
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.login import LoginManager
+from flask.ext.openid import OpenID
 from flask.ext.mail import Mail
-from flask.ext.babel import Babel
+from flask.ext.babel import Babel, lazy_gettext
 
 from config import (
   basedir,
@@ -39,10 +41,14 @@ db = SQLAlchemy(app)
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
+lm.login_message = lazy_gettext("Please log in to access this page.")
+
 oid = OpenID(app, os.path.join(basedir, 'tmp'))
+
 
 # Admin interface
 admin = Admin(app)
+
 
 # Logging
 if not app.debug:
@@ -80,8 +86,27 @@ if not app.debug:
   app.logger.addHandler(file_handler)
   app.logger.info('microblog startup')
 
+
 # Templating
 app.jinja_env.globals['momentjs'] = momentjs
+
+
+# Flask 0.10 JSON serializes user sessions, causing problems with
+# flash messages that are lazy-evaluated by Babel
+class CustomJSONEncoder(JSONEncoder):
+  """This class adds support for lazy translation texts to Flask's
+  JSON encoder. This is necessary when flashing translated texts.
+  """
+  def default(self, obj):
+    from speaklater import is_lazy_string
+    if is_lazy_string(obj):
+      try:
+        return unicode(obj) # Python 2
+      except NameError:
+        return str(obj) # Python 3
+    return super(CustomJSONEncoder, self).default(obj)
+
+app.json_encoder = CustomJSONEncoder
 
 
 # Put views import after app creation to avoid circular import
