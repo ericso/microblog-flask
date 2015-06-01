@@ -1,3 +1,6 @@
 *.pyc
-tmp/
 *.db
+
+tmp/
+search.db/
+translations/
