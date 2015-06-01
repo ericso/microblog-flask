@@ -4,6 +4,8 @@
 {% block content %}
   <h1>Hi, {{ g.user.nickname }}!</h1>
 
+  {% include 'flash.html' %}
+
   <form action="" method="post" name="post">
     {{ form.hidden_tag() }}
 
