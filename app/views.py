@@ -174,6 +174,8 @@ def user(nickname, page=1):
 @app.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit():
+  """Edit a User
+  """
   form = EditForm(g.user.nickname)
   if form.validate_on_submit():
     g.user.nickname = form.nickname.data
@@ -187,6 +189,22 @@ def edit():
     form.about_me.data = g.user.about_me
   return render_template('edit.html', form=form)
 
+@app.route('/delete/<int:id>')
+@login_required
+def delete(id):
+  """Delete a Post
+  """
+  post = Post.query.get(id)
+  if post is None:
+    flash("Post not found.")
+    return redirect(url_for('index'))
+  if post.author.id != g.user.id:
+    flash("You are not authorized to delete this post.")
+    return redirect(url_for('index'))
+  db.session.delete(post)
+  db.session.commit()
+  flash("Your post has been deleted.")
+  return redirect(url_for('index'))
 
 @app.errorhandler(404)
 def not_found_error(error):
