@@ -7,8 +7,21 @@
   <div class="media-body">
     <h4 class="media-heading">{{ post.author.nickname }}</h4>
     <p><i>{{ momentjs(post.timestamp).fromNow() }}</i></p>
-    <p><strong>{{ post.body }}</strong></p>
+    <p>
+      <strong>
+        <span id="post{{ post.id }}">{{ post.body }}</span>
+      </strong>
+    </p>
+    {% if post.language != None and post.language != '' and post.language != g.locale %}
+    <div>
+      <span id="translation{{ post.id }}">
+        <a href="javascript:translate('{{ post.language }}', '{{ g.locale }}', '#post{{ post.id }}', '#translation{{ post.id }}', '#loading{{ post.id }}');">{{ _('Translate') }}</a>
+      </span>
+    </div>
+    <img id="loading{{ post.id }}" style="display: none" src="/static/img/loading.gif">
+    {% endif %}
   </div>
+
 </div>
 
 <div>

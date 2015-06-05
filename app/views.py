@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import (
   render_template,
+  jsonify,
   flash,
   redirect,
   session,
@@ -16,6 +17,9 @@ from flask.ext.login import (
   login_required,
 )
 from flask.ext.babel import gettext
+
+from guess_language import guessLanguage
+from translate import microsoft_translate
 
 from config import (
   POSTS_PER_PAGE,
@@ -89,13 +93,20 @@ def get_locale():
 def index(page=1):
   form = PostForm()
   if form.validate_on_submit():
+    # Detect language
+    language = guessLanguage(form.post.data)
+    if language == 'UNKNOWN' or len(language) > 5:
+      language = ''
+
     post = Post(
       body=form.post.data,
       timestamp=datetime.utcnow(),
-      author=g.user
+      author=g.user,
+      language=language
     )
     db.session.add(post)
     db.session.commit()
+
     flash("Your post is now live!")
     return redirect(url_for('index'))
 
@@ -250,3 +261,14 @@ def search_results(query):
     query=query,
     results=results
   )
+
+@app.route('/translate', methods=['POST'])
+@login_required
+def translate():
+  return jsonify({
+    'text': microsoft_translate(
+      request.form['text'],
+      request.form['sourceLang'],
+      request.form['destLang'],
+    )
+  })

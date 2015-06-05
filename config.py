@@ -40,3 +40,7 @@ LANGUAGES = {
   'en': 'English',
   'es': 'Español'
 }
+
+# MS Translation API
+MS_TRANSLATOR_CLIENT_ID = 'microblog-flask-eso'
+MS_TRANSLATOR_CLIENT_SECRET = 'E9tcaNzmkx8Oyi/31FHeINm6XZhrto/742h+kUYCwhY='
